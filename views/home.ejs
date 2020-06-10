@@ -1,4 +1,23 @@
 <main>
 <h1>welcome</h1>
+<section>
+    <% if(locals.user){ %>
+    <h4>Posts</h4>
+    <form action="/post/create" method="POST">
+        <textarea cols="30" rows="10" placeholder="Type Here....." name="content"></textarea>
+        <button>Post</button>
+    </form>
+    <% } %>
+    <div>
+        <ul>
+            <% for(post of posts){%>
+                <li>
+                        <div><%= post.post %></div>
+                        <div><%= post.user.name %></div>
+                </li>
+            <%}%>
+        </ul>
+    </div>
+</section>
 </main>
    
