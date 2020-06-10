@@ -7,7 +7,7 @@ module.exports.profile = function(req,res){
 module.exports.signupPage = function(req,res){
     if(req.isAuthenticated())
     {
-        return res.redirect("profile");
+        return res.redirect("/user/profile");
     }
     return res.render("signup",{title:"Socio | Signup"})
 }
@@ -15,7 +15,7 @@ module.exports.signupPage = function(req,res){
 module.exports.signinPage = function(req,res){
     if(req.isAuthenticated())
     {
-        return res.redirect("profile");
+        return res.redirect("/user/profile");
     }
     return res.render("signin",{title:"Socio | Signin"})
 }

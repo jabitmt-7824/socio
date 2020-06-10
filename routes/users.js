@@ -9,6 +9,6 @@ router.get("/signup",usersController.signupPage);
 router.get("/signin",usersController.signinPage);
 
 router.post("/signup-user", usersController.singnupUser);
-router.post("/signin-user", passport.authenticate("local" ,{failureRedirect:"/user/signin"}),usersController.signinUser);
+router.post("/signin-user", passport.authenticate("local" ,{failureRedirect:"/user/signin"},),usersController.signinUser);
 router.get("/signout",usersController.signOut);
 module.exports = router;
