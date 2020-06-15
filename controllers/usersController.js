@@ -1,13 +1,15 @@
 const User = require("../models/user");
 
 module.exports.profile = function(req,res){
-    return res.render("profile",{title:"Socio | Profile"});
+    User.findById(req.params.id,function(err,user){
+        return res.render("profile",{title:"Socio | Profile",profile_user:user});
+    }); 
 }
 
 module.exports.signupPage = function(req,res){
     if(req.isAuthenticated())
     {
-        return res.redirect("/user/profile");
+        return res.redirect("/");
     }
     return res.render("signup",{title:"Socio | Signup"})
 }
@@ -15,7 +17,7 @@ module.exports.signupPage = function(req,res){
 module.exports.signinPage = function(req,res){
     if(req.isAuthenticated())
     {
-        return res.redirect("/user/profile");
+        return res.redirect("/");
     }
     return res.render("signin",{title:"Socio | Signin"})
 }
