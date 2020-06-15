@@ -1,6 +1,7 @@
 <main>
-<h1>welcome</h1>
+
 <section id="feed-posts">
+    <h1>welcome</h1>
     <h4>Posts</h4>
     <% if(locals.user){ %>
     <form action="/post/create" id="new-post-form" method="POST">
@@ -17,11 +18,17 @@
         </ul>
     </div>
 </section>
+
 <% if(locals.user){ %>
 <section id="friends-list">
     <h4><u>Friends:</u></h4>
     <ul>
-        <% for(let usr of all_users){ %>
+        <% for(let usr of all_users){ 
+          if(usr.id == user.id)
+          {
+              continue;
+          }  
+        %>
         <li>
             <a href="/user/profile/<%= usr.id %>"><%= usr.name %></a>
         </li>

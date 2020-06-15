@@ -1,5 +1,13 @@
 <main>
 <h1>profile</h1>
+<% if(profile_user.id == user.id){ %>
+    <form action="/user/profile/update/<%= profile_user.id %>" method="POST">
+        <input type="text" name="name" id="name" value="<%= profile_user.name %>"/>
+        <input type="email" name="email" id="email" value="<%= profile_user.email %>"/>
+        <button>Update</button>
+    </form>
+<% } else{ %>
 <div><span>Name:</span><span><%= profile_user.name %></span></div>
 <div><span>E-mail:</span><span><%= profile_user.email %></span></div>
+<% } %>
 </main>

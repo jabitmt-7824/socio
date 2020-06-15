@@ -2,8 +2,21 @@ const User = require("../models/user");
 
 module.exports.profile = function(req,res){
     User.findById(req.params.id,function(err,user){
-        return res.render("profile",{title:"Socio | Profile",profile_user:user});
+        return res.render("profile",{title: `Socio | ${user.name} |Profile`,profile_user:user});
     }); 
+}
+
+module.exports.updateProfile = function(req,res){
+    if(req.user.id == req.params.id)
+    {
+        User.findByIdAndUpdate(req.params.id, req.body, function(err){
+            if(err){
+                console.log("error in updating user profile");
+                return;
+            }
+            return res.redirect("back");
+        });
+    }
 }
 
 module.exports.signupPage = function(req,res){
