@@ -25,12 +25,7 @@ li {
 
 /* main body */
 main {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-around; 
-}
+  height: 100%; }
 
 /* footer section */
 footer {
