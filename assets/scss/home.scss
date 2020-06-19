@@ -1,0 +1,14 @@
+#home-main{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;   
+}
+
+#feed-posts{
+    width:70%;
+}
+
+#friends-list{
+    width:24%;
+}

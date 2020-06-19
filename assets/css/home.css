@@ -1,7 +1,11 @@
-#feed-posts{
-    width:70%;
-}
+#home-main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between; }
 
-#friends-list{
-    width:24%;
-}
+#feed-posts {
+  width: 70%; }
+
+#friends-list {
+  width: 24%; }

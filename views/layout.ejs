@@ -1,12 +1,40 @@
 <html>
-    <head>
-        <title><%= title %></title>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="/css/layout.css">
-    </head>
-    <body>
-        <%- include("header"); -%>
-        <%- body %>
-        <%- include("footer"); -%>
-    </body>
+
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/layout.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+    <%- style -%>
+</head>
+
+<body>
+    <%- include("header"); -%>
+    <%- body %>
+    <%- include("footer"); -%>
+    <script>
+            <% if (flash.success && flash.success.length > 0) { %>
+            new Noty({
+                type: "success",
+                layout: 'topRight',
+                theme: 'mint',
+                text:  '<%= flash.success %>',
+                timeout: 1500
+            }).show();
+            <% } %>
+
+            <% if (flash.error && flash.error.length > 0) { %>
+            new Noty({
+                type: "error",
+                layout: 'topRight',
+                theme: 'mint',
+                text:  '<%= flash.error %>',
+                timeout: 1500
+            }).show();
+            <% } %>
+    </script>
+</body>
+
 </html>

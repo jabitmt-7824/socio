@@ -53,11 +53,13 @@ module.exports.singnupUser = async function (req, res) {
 }
 
 module.exports.signinUser = function (req, res) {
+    req.flash("success","You have signed in successfully");
     return res.redirect("/");
 }
 
 
 module.exports.signOut = function (req, res) {
     req.logout();
+    req.flash("success","yo have logged out!");
     return res.redirect("/");
 }
