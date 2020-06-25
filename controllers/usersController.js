@@ -23,7 +23,7 @@ module.exports.updateProfile = async function (req, res) {
                 user.email = req.body.email;
                 if (req.file) {
                     if (user.avatar) {
-                        if (fs.existsSync(user.avatar)) {
+                        if (fs.existsSync(path.join(__dirname, "..", user.avatar))) {
                             fs.unlinkSync(path.join(__dirname, "..", user.avatar));
                         }
                     }
