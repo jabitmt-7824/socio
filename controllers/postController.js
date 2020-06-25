@@ -4,10 +4,18 @@ const Comment = require("../models/comment");
 module.exports.createPost = function (req, res) {
     Post.create({ post: req.body.content, user: req.user._id }, function (err, post) {
         if (err) {
-            req.flash("error",err);
+            req.flash("error", err);
             return res.redirect("back");
         }
-        req.flash("success","post published");
+        if (req.xhr) {
+            return res.status(200).json({
+                data: {
+                    post: post
+                },
+                message: "post created"
+            });
+        }
+        req.flash("success", "post published");
         return res.redirect("back");
     })
 }
@@ -18,15 +26,23 @@ module.exports.delPost = async function (req, res) {
         if (post.user == req.user.id) {
             post.remove();
             await Comment.deleteMany({ post: req.params.id });
-            req.flash("success","post and associated comments are deleted");
+            if (req.xhr) {
+                return res.status(200).json({
+                    data: {
+                        postId: req.params.id
+                    },
+                    message: "post deleted"
+                });
+            }
+            req.flash("success", "post and associated comments are deleted");
             return res.redirect("back");
         }
         else {
-            req.flash("error","you are not authenticated to to delete this post");
+            req.flash("error", "you are not authenticated to to delete this post");
             return res.redirect("back");
         }
     } catch (err) {
-        req.flash("error",err);
+        req.flash("error", err);
         return res.redirect("back");
     }
 
