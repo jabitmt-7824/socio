@@ -12,7 +12,8 @@
                 success: function (data) {
                     console.log(data);
                     let newComment = newCommentDom(data.data.comment);
-                    $(".post-comments-list>ul").prepend(newComment);
+                    console.log(data.data.comment);
+                    $(" .post-comments-list>ul").prepend(newComment);
                     new Noty({
                         type: "success",
                         layout: 'topRight',
@@ -21,6 +22,7 @@
                         timeout: 1500
                     }).show();
                     deleteComment($(" .delete-comment-btn", newComment));
+                    new ToggleLike($(" .toggle-like-button", newComment));
                 },
                 error: function (err) {
                     new Noty({
@@ -44,6 +46,9 @@
         <br>
         <small>
             ${ comment.user.name}  
+        </small>
+        <small>
+            <a href="/like/toggle/?id=${comment._id}&type=comment" data-likes="0" class="toggle-like-button">0 Like</a>
         </small>
     </p>
 </li> `);
@@ -84,5 +89,4 @@
 
     createComment();
     // deleteComment();
-
 }

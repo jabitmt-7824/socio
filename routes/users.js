@@ -14,5 +14,9 @@ router.post("/signin-user", passport.authenticate("local" ,{failureRedirect:"/us
 router.get("/signout",usersController.signOut);
 router.get("/auth/google", passport.authenticate("google",{scope:['profile','email']}));
 router.get("/auth/google/callback",passport.authenticate("google",{failureRedirect:"/user/signin"}),usersController.signinUser);
+router.get("/forget-password-form",usersController.forgetForm);
+router.post("/forget-password",usersController.forgetPassword);
+router.get("/reset-password-form/:access_token",usersController.resetForm);
+router.post("/reset-password/:id",usersController.resetPassword);
 
 module.exports = router;

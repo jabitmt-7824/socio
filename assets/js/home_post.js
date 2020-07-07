@@ -10,8 +10,8 @@
                 url: "/post/create",
                 data: newPostForm.serialize(),
                 success: function (data) {
-                    console.log(data);
                     let newPost = newPostDom(data.data.post);
+                    console.log(data.data);
                     new Noty({
                         type: "success",
                         layout: 'topRight',
@@ -22,6 +22,7 @@
                     $("#posts-list-container>ul").prepend(newPost);
 
                     deletePost($(" .delete-post-btn", newPost));
+                    new ToggleLike($(" .toggle-like-button", newPost));
                 },
                 error: function (err) {
                     new Noty({
@@ -45,6 +46,9 @@
             <br>
             <small>
             ${ post.user.name}
+            </small>
+            <small>
+               <a href="/like/toggle/?id=${post._id}&type=post" data-likes="0" class="toggle-like-button">0 Like</a>
             </small>
         </p>
         <div class="post-comments">
@@ -95,5 +99,4 @@
     }
 
     createPost();
-
 }

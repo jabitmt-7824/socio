@@ -1,29 +1,28 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 
-module.exports.createPost = function (req, res) {
-    Post.create({ post: req.body.content, user: req.user._id }, function (err, post) {
-        if (err) {
-            req.flash("error", err);
-            return res.redirect("back");
-        }
-        if (req.xhr) {
-            return res.status(200).json({
-                data: {
-                    post: post
-                },
-                message: "post created"
-            });
-        }
-        req.flash("success", "post published");
-        return res.redirect("back");
-    })
+module.exports.createPost = async function (req, res) {
+    let post = await Post.create({ post: req.body.content, user: req.user.id });
+    post = await post.populate('user', 'name').execPopulate();
+    if (req.xhr) {
+        return res.status(200).json({
+            data: {
+                post: post
+            },
+            message: "post created"
+        });
+    }
+    req.flash("success", "post published");
+    return res.redirect("back");
 }
 
 module.exports.delPost = async function (req, res) {
     try {
         let post = await Post.findById(req.params.id);
+        console.log(post.user);
+        console.log(req.user.id);
         if (post.user == req.user.id) {
+
             post.remove();
             await Comment.deleteMany({ post: req.params.id });
             if (req.xhr) {

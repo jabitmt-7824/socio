@@ -2,11 +2,10 @@ const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const crypto = require("crypto");
 const User = require("../models/user");
-const { Passport } = require("passport");
 
 passport.use(new GoogleStrategy({
     clientID: "672051795843-at82juahq1i8i0i6kgnqpq92vdplvd8l.apps.googleusercontent.com",
-    clientSecret: "UyW265f2L2SHV2tlEQKloyIk",
+    clientSecret: "",
     callbackURL: "http://localhost:1000/user/auth/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -27,7 +26,7 @@ passport.use(new GoogleStrategy({
                 },
                     function (err, user) {
                         if (err) {
-                            console.log("error in craeting user in google aouth ", err);
+                            console.log("error in creating user in google oauth ", err);
                             return;
                         }
                         done(null, user);
@@ -38,4 +37,4 @@ passport.use(new GoogleStrategy({
     })
 );
 
-module.exports = Passport;
+module.exports = passport;

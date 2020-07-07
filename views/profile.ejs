@@ -2,7 +2,7 @@
 <h1>profile</h1>
 <img src="<%= profile_user.avatar %>" alt="<%= profile_user.name %>" width="100"/>
 <% if(profile_user.id == locals.user.id){ %>
-    <form action="/user/profile/update/<%= profile_user.id %>" method="POST" enctype="multipart/form-data"enctype="multipart/form-data">
+    <form action="/user/profile/update/<%= profile_user.id %>" method="POST" enctype="multipart/form-data">
         <input type="text" name="name" id="name" value="<%= profile_user.name %>"/>
         <input type="email" name="email" id="email" value="<%= profile_user.email %>"/>
         <input type="file" name="avatar" />
