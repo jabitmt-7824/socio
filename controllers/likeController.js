@@ -1,41 +1,65 @@
-const Post = require("../models/post");
-const Comment = require("../models/comment");
 const Like = require("../models/like");
+const Post = require("../models/post");
+const Comment = require('../models/comment');
 
-module.exports.toggleLike = async function(req,res){
-    try{
-        let likable;
+
+module.exports.toggleLike = async function (req, res) {
+    try {
+
+        // like/toggle/?id=abcdef&type=Post
+        let likeable;
         let deleted = false;
-        if(req.query.type == "post"){
-            likable = await Post.findById(req.query.id).populate("likes");
+
+
+        if (req.query.type == 'Post') {
+            likeable = await Post.findById(req.query.id).populate('likes');
+        } else {
+            likeable = await Comment.findById(req.query.id).populate('likes');
         }
-        else{
-            likable = await Comment.findById(req.query.id).populate("likes");
-        }
-        let existingLike = await Like.findOne({user:req.user.id, likable:req.query.id, onModel:req.query.type});
-        if(existingLike){
-            likable.likes.pull(existingLike);
-            likable.save();
+
+
+        // check if a like already exists
+        let existingLike = await Like.findOne({
+            user: req.user._id,
+            likeable: req.query.id,
+            onModel: req.query.type
+        })
+
+        // if a like already exists then delete it
+        if (existingLike) {
+            likeable.likes.pull(existingLike._id);
+            likeable.save();
+
             existingLike.remove();
             deleted = true;
-        }else{
-            let newLike = await Like.create({user:req.user.id, likable:req.query.id, onModel:req.query.type});
-            likable.push(newLike);
-            likable.save();
+
+        } else {
+            // else make a new like
+
+            let newLike = await Like.create({
+                user: req.user._id,
+                likeable: req.query.id,
+                onModel: req.query.type
+            });
+
+            likeable.likes.push(newLike._id);
+            likeable.save();
+
         }
-        return res.json(200,{
-            message:"toggle work successfully",
-            data:{
-                deleted:deleted
+
+        return res.json(200, {
+            message: "Request successful!",
+            data: {
+                deleted: deleted
             }
+        })
+
+
+
+    } catch (err) {
+        console.log(err);
+        return res.json(500, {
+            message: 'Internal Server Error'
         });
     }
-    catch(err)
-    {
-        console.log("error",err);
-        return res.json(500,{
-            message:"internal server error"
-        });
-    }
-    
 }

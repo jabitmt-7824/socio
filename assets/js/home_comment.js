@@ -1,92 +1,114 @@
-{
-    let createComment = function () {
-        let newCommentForm = $("#new-comment-form");
-        newCommentForm.submit(function (e) {
-            e.preventDefault();
+// Let's implement this via classes
 
-            // method to new post data tp create new post
+// this class would be initialized for every post on the page
+// 1. When the page loads
+// 2. Creation of every post dynamically via AJAX
+
+class PostComments{
+    // constructor is used to initialize the instance of the class whenever a new instance is created
+    constructor(postId){
+        this.postId = postId;
+        this.postContainer = $(`#post-${postId}`);
+        this.newCommentForm = $(`#post-${postId}-comments-form`);
+
+        this.createComment(postId);
+
+        let self = this;
+        // call for all the existing comments
+        $(' .delete-comment-btn', this.postContainer).each(function(){
+            self.deleteComment($(this));
+        });
+    }
+
+
+    createComment(postId){
+        let pSelf = this;
+        this.newCommentForm.submit(function(e){
+            e.preventDefault();
+            let self = this;
+
             $.ajax({
-                type: "post",
-                url: "/comment/create",
-                data: newCommentForm.serialize(),
-                success: function (data) {
-                    console.log(data);
-                    let newComment = newCommentDom(data.data.comment);
-                    console.log(data.data.comment);
-                    $(" .post-comments-list>ul").prepend(newComment);
+                type: 'post',
+                url: '/comment/create',
+                data: $(self).serialize(),
+                success: function(data){
+                    let newComment = pSelf.newCommentDom(data.data.comment);
+                    $(`#post-comments-${postId}`).prepend(newComment);
+                    pSelf.deleteComment($(' .delete-comment-btn', newComment));
+
+                    // CHANGE :: enable the functionality of the toggle like button on the new comment
+                    new ToggleLike($(' .toggle-like-button', newComment));
                     new Noty({
-                        type: "success",
+                        theme: 'relax',
+                        text: "Comment published!",
+                        type: 'success',
                         layout: 'topRight',
-                        theme: 'mint',
-                        text: "Comment Published",
                         timeout: 1500
+                        
                     }).show();
-                    deleteComment($(" .delete-comment-btn", newComment));
-                    new ToggleLike($(" .toggle-like-button", newComment));
-                },
-                error: function (err) {
-                    new Noty({
-                        type: "error",
-                        layout: 'topRight',
-                        theme: 'mint',
-                        text: err,
-                        timeout: 1500
-                    }).show();
+
+                }, error: function(error){
+                    console.log(error.responseText);
                 }
             });
+
 
         });
     }
 
-    let newCommentDom = function (comment) {
-        return $(`<li id="comment-${comment._id}">   
-    <p>
-        <small><a class="delete-comment-btn" href="/comment/delete/${comment._id}">x</a></small>
-        ${comment.comment}
-        <br>
-        <small>
-            ${ comment.user.name}  
-        </small>
-        <small>
-            <a href="/like/toggle/?id=${comment._id}&type=comment" data-likes="0" class="toggle-like-button">0 Like</a>
-        </small>
-    </p>
-</li> `);
+
+    newCommentDom(comment){
+        // CHANGE :: show the count of zero likes on this comment
+
+        return $(`<li id="comment-${ comment._id }">
+                        <p>
+                            
+                            <small>
+                                <a class="delete-comment-btn" href="/comment/delete/${comment._id}">X</a>
+                            </small>
+                            
+                            ${comment.comment}
+                            <br>
+                            <small>
+                                ${comment.user.name}
+                            </small>
+                            <small>
+                            
+                                <a class="toggle-like-button" data-likes="0" href="/like/toggle/?id=${comment._id}&type=Comment">
+                                    0 Likes
+                                </a>
+                            
+                            </small>
+
+                        </p>    
+
+                </li>`);
     }
 
-    let deleteComment = function () {
-        let deleteLink = $(".delete-comment-btn");
-        deleteLink.click(function(e) {
+
+    deleteComment(deleteLink){
+        $(deleteLink).click(function(e){
             e.preventDefault();
-            console.log("hello");
 
             $.ajax({
-                type: "get",
-                url: deleteLink.prop("href"),
-                success: function (data) {
-                    console.log(data);
+                type: 'get',
+                url: $(deleteLink).prop('href'),
+                success: function(data){
                     $(`#comment-${data.data.commentId}`).remove();
+
                     new Noty({
-                        type: "success",
-                        layout: 'topRight',
-                        theme: 'mint',
+                        theme: 'relax',
                         text: "Comment Deleted",
-                        timeout: 1500
-                    }).show();
-                },
-                error: function (err) {
-                    new Noty({
-                        type: "error",
+                        type: 'success',
                         layout: 'topRight',
-                        theme: 'mint',
-                        text: err,
                         timeout: 1500
+                        
                     }).show();
+                },error: function(error){
+                    console.log(error.responseText);
                 }
             });
+
         });
     }
-
-    createComment();
-    // deleteComment();
 }
