@@ -20,8 +20,19 @@
 </section>
 
 <% if(locals.user){ %>
+<section id="friends-users">
 <section id="friends-list">
     <h4><u>Friends:</u></h4>
+    <ul>
+        <% for(let friend of all_friends.friends){ %>
+            <li>
+                <a href="/user/profile/<%= friend.to_user._id %>"><%= friend.to_user.name %></a>
+            </li>
+        <%}%>
+    </ul>
+</section>
+<section id="users-list">
+    <h4><u>Users:</u></h4>
     <ul>
         <% for(let usr of all_users){ 
           if(usr.id == locals.user.id)
@@ -35,17 +46,16 @@
         <%}%>
     </ul>
 </section>
+</section>
 <% } %>
 </main>
 <script src="/js/home_post.js"></script>
 <script src="/js/home_comment.js"></script>
 <!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
-<script src="js/toggle_like.js"></script>
+<script src="/js/toggle_like.js"></script>
 <script>
     $(' .toggle-like-button').each(function(){
         let self = this;
         let toggleLike = new ToggleLike(self);
     });
 </script>
-
-   

@@ -8,5 +8,6 @@ router.use("/post", require("./posts"));
 router.use("/comment", require("./comments"));
 router.use("/api", require("./api"));
 router.use("/like", require("./like"));
+router.use("/friend", require("./friends"));
 
 module.exports = router;

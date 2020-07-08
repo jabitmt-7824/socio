@@ -11,5 +11,7 @@
 <% } else{ %>
 <div><span>Name:</span><span><%= profile_user.name %></span></div>
 <div><span>E-mail:</span><span><%= profile_user.email %></span></div>
+<div><a id="friend-btn" href="/friend/toggle/<%=profile_user.id %>" ><%= frndStatus %></a></div>
 <% } %>
 </main>
+<script src="/js/profile_friend.js"></script>

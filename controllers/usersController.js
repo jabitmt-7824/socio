@@ -1,15 +1,28 @@
 const User = require("../models/user");
+const Friendship = require("../models/friendship");
 const e = require("express");
 const fs = require("fs");
 const path = require("path");
 const Foget = require("../models/forget");
 const crypto = require("crypto");
-const forgetMailer = require("../mailers/forget_password_mailer"); 
+const forgetMailer = require("../mailers/forget_password_mailer");
 
-module.exports.profile = function (req, res) {
-    User.findById(req.params.id, function (err, user) {
-        return res.render("profile", { title: `Socio | ${user.name} |Profile`, profile_user: user });
-    });
+module.exports.profile = async function (req, res) {
+    try {
+        let friendStatus = "Add Friend";
+        let user = await User.findById(req.params.id);
+        let existFriend = await Friendship.findOne({ from_user: req.user._id, to_user: req.params.id });
+        if (existFriend) {
+            friendStatus = "Unfriend"
+        }
+        else {
+            friendStatus = "Add Friend"
+        }
+        return res.render("profile", { title: `Socio | ${user.name} |Profile`, profile_user: user, frndStatus: friendStatus });
+    }
+    catch (err) {
+        console.log("error:", err);
+    }
 }
 
 module.exports.updateProfile = async function (req, res) {
@@ -94,32 +107,31 @@ module.exports.signOut = function (req, res) {
     return res.redirect("/");
 }
 
-module.exports.forgetForm = function(req, res){
-    return res.render("forget_password_form",{title:"forget password"});
+module.exports.forgetForm = function (req, res) {
+    return res.render("forget_password_form", { title: "forget password" });
 }
 
-module.exports.forgetPassword = async function(req,res){
-        let user = await User.findOne({email:req.body.email});
-        if(user){
-            let forget = await Foget.create({user:user._id,access_token:crypto.randomBytes(10).toString("hex"),verified:true});
-            forgetMailer.forgetPassword(user,forget);
-            req.flash("success","reset password link sent to your e-mail");
-            return res.redirect("/");
-        }
+module.exports.forgetPassword = async function (req, res) {
+    let user = await User.findOne({ email: req.body.email });
+    if (user) {
+        let forget = await Foget.create({ user: user._id, access_token: crypto.randomBytes(10).toString("hex"), verified: true });
+        forgetMailer.forgetPassword(user, forget);
+        req.flash("success", "reset password link sent to your e-mail");
+        return res.redirect("/");
+    }
 }
 
-module.exports.resetForm = function(req,res){
-    Foget.findOneAndUpdate({access_token:req.params.access_token},{verified:false},function(err,forget){
-        if(err)
-        {
+module.exports.resetForm = function (req, res) {
+    Foget.findOneAndUpdate({ access_token: req.params.access_token }, { verified: false }, function (err, forget) {
+        if (err) {
             console.log("error in finding and updating in forget");
             return;
         }
-        return res.render("reset_password",{title:"reset password",userId:forget.user});
+        return res.render("reset_password", { title: "reset password", userId: forget.user });
     });
 }
 
-module.exports.resetPassword = function(req, res){
+module.exports.resetPassword = function (req, res) {
     if (req.body.password != req.body.confirm) {
         req.flash("error", "Password and confirm password does not match");
         return res.redirect('back');
