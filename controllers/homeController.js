@@ -16,18 +16,25 @@ module.exports.home = async function (req, res) {
                 }
             }).populate('likes');
         let users = await User.find({});
-        let friends = await User.findById(req.user._id)
-        .populate({
-            path: "friends",
-            populate: {
-                path: "to_user"
-            }
-        });
+        if (req.user) {
+            let friends = await User.findById(req.user._id)
+                .populate({
+                    path: "friends",
+                    populate: {
+                        path: "to_user"
+                    }
+                });
+            return res.render('home', {
+                title: "Socio | Home",
+                posts: posts,
+                all_users: users,
+                all_friends: friends
+            });
+        }
         return res.render('home', {
             title: "Socio | Home",
             posts: posts,
-            all_users: users,
-            all_friends: friends
+            all_users: users
         });
 
     } catch (err) {
