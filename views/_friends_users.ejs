@@ -1,0 +1,25 @@
+<section id="friends-list">
+    <h4><u>Friends:</u></h4>
+    <ul>
+        <% for(let friend of all_friends.friends){ %>
+            <li>
+                <a href="/user/profile/<%= friend.to_user._id %>"><%= friend.to_user.name %></a>
+            </li>
+        <%}%>
+    </ul>
+</section>
+<section id="users-list">
+    <h4><u>Users:</u></h4>
+    <ul>
+        <% for(let usr of all_users){ 
+          if(usr.id == locals.user.id)
+          {
+              continue;
+          }  
+        %>
+        <li>
+            <a href="/user/profile/<%= usr.id %>"><%= usr.name %></a>
+        </li>
+        <%}%>
+    </ul>
+</section>

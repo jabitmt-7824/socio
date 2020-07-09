@@ -15,6 +15,13 @@ const passportJwt = require("./config/passport-jwt-strategy");
 
 const app = express();
 
+// setting up chatbox server and socket.io
+const chatServer = require("http").Server(app);
+const chatSocket = require("./config/chat_socket").chatSocket(chatServer);
+chatServer.listen(80, ()=>{
+    console.log("chat server is running successsfully on port 70");
+});
+
 app.use(sassMiddleware({
     /* Options */
     src: "./assets/scss",
