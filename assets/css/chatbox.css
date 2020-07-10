@@ -18,7 +18,10 @@
     #user-chat-box #chat-messages-list .other-message {
       text-align: left;
       padding: 5px;
-      width: 180px; }
+      width: 180px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap; }
       #user-chat-box #chat-messages-list .other-message span {
         display: inline-block;
         padding: 15px;
@@ -27,7 +30,10 @@
       margin-left: 100px;
       width: 180px;
       text-align: right;
-      padding: 5px; }
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap; }
       #user-chat-box #chat-messages-list .self-message span {
         display: inline-block;
         padding: 15px;
