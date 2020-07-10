@@ -66,6 +66,6 @@ class ChatEngine{
             newMessage.addClass(messageType);
 
             $('#chat-messages-list').append(newMessage);
-        })
+        });
     }
 }
