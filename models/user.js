@@ -38,6 +38,14 @@ let storage = multer.diskStorage({
 userSchema.statics.uploadedAvatar = multer({ storage: storage }).single("avatar");
 userSchema.statics.avatarPath = AVATAR_PATH;
 
+if(!userSchema.options.toObject) userSchema.options.toObject = {};
+userSchema.options.toObject.transform = function(doc, ret, options){
+    delete ret.password;
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    return ret;
+}
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

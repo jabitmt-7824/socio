@@ -12,7 +12,7 @@ module.exports.signinUser = async function(req, res) {
         return res.status(200).json({
             message: "signin successfully",
             data: {
-                token: jwt.sign(user.toJSON(), 'socio', { expiresIn: '100000' })
+                token: jwt.sign(user.toObject(), 'socio', { expiresIn: '100000' })
             }
         }); 
     }
