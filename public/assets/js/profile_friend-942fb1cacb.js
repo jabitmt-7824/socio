@@ -1,0 +1,1 @@
+(function(){let e=$("#friend-btn");e.click((function(t){t.preventDefault(),$.ajax({type:"post",url:e.attr("href"),success:function(t){t.data.deleted?e.html("Add Friend"):e.html("Unfriend")},error:function(){console.log("error in completing the request")}})}))})();

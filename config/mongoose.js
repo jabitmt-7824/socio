@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-mongoose.connect('mongodb://localhost:27017/socio_db', {useNewUrlParser: true, useUnifiedTopology: true});
+const env = require("./environment");
+mongoose.connect(`mongodb://localhost:27017/${env.db}`, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const db = mongoose.connection;
 

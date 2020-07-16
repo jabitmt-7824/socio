@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../../models/user");
+const env = require("../../../config/environment");
 
 module.exports.signinUser = async function(req, res) {
     try {
@@ -12,7 +13,7 @@ module.exports.signinUser = async function(req, res) {
         return res.status(200).json({
             message: "signin successfully",
             data: {
-                token: jwt.sign(user.toObject(), 'socio', { expiresIn: '100000' })
+                token: jwt.sign(user.toObject(), env.jwt_secret, { expiresIn: '100000' })
             }
         }); 
     }
